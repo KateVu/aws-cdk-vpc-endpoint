@@ -1,0 +1,2 @@
+- service: s3
+- service: dynamodb
