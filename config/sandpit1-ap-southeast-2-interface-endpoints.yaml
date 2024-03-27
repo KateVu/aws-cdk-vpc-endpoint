@@ -1,0 +1,8 @@
+# We will face this issue `To set PrivateDnsOnlyForInboundResolverEndpoint to true, the VPC vpc-xxxxxxx must have a Gateway endpoint for the service` when creating interface endpoint for s3
+# So to use private_dns_enabled = true when created create the gateway for s3 ahead
+- service: s3 
+- service: ssm
+- service: ec2
+- service: ec2messages
+- service: ssmmessages
+- service: kms
