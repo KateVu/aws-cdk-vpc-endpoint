@@ -2,7 +2,7 @@
 Deploy endpoints for vpc via aws-cdk. The list of gateways and interfaces endpoints are managed in config folder
 
 ## Getting started
-### Prequisition: 
+### Prerequisites: 
 - a vpc has been deploy. Please refer to https://github.com/KateVu/aws-cdk-vpc
 ### Check file for mapping aws name and account
 - Add if not exist /config/aws_account.yaml
