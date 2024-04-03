@@ -1,4 +1,4 @@
-import { CfnOutput, Stack, StackProps, Tags } from 'aws-cdk-lib';
+import { CfnOutput, Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as ec2 from 'aws-cdk-lib/aws-ec2'
 import { getEndpoints } from './utils';
