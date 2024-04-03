@@ -3,6 +3,7 @@ import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { AwsCdkVpcEndpointStack } from '../lib/aws-cdk-vpc-endpoint-stack';
 import { getAccountId } from '../lib/utils';
+import { Ec2InstanceStack } from '../lib/ec2';
 
 //Environment variable for yaml file path and file name
 const configFolder = '../config/'
@@ -44,3 +45,16 @@ cdk.Tags.of(vpcEndpointStack).add('createdby', 'KateVu')
 cdk.Tags.of(vpcEndpointStack).add('createdvia', 'AWS-CDK')
 cdk.Tags.of(vpcEndpointStack).add('environment', envName)
 cdk.Tags.of(vpcEndpointStack).add('repo', 'https://github.com/KateVu/aws-cdk-vpc-endpoint')
+
+const ec2Instance = new Ec2InstanceStack(app, 'Ec2InstanceTest', {
+  stackName: `vpc-simple-ec2-${envName}`,
+  region: region,
+  accountId: accountId,
+  accountName: accountName,
+  envName: envName,
+})
+
+cdk.Tags.of(ec2Instance).add('createdby', 'KateVu')
+cdk.Tags.of(ec2Instance).add('createdvia', 'AWS-CDK')
+cdk.Tags.of(ec2Instance).add('environment', envName)
+cdk.Tags.of(ec2Instance).add('repo', 'https://github.com/KateVu/aws-cdk-vpc-endpoint')
