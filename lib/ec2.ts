@@ -3,15 +3,12 @@ import { Construct } from 'constructs';
 import * as ec2 from 'aws-cdk-lib/aws-ec2'
 import * as iam from 'aws-cdk-lib/aws-iam'
 
-
-
 interface Ec2StackPros extends StackProps {
     region: string,
     accountId: string,
     accountName: string,
     envName: string,
 }
-
 
 export class Ec2InstanceStack extends Stack {
     constructor(scope: Construct, id: string, props: Ec2StackPros) {
@@ -42,6 +39,7 @@ export class Ec2InstanceStack extends Stack {
                     effect: iam.Effect.ALLOW,
                     actions: [
                         's3:ListBucket',
+                        's3:ListAllMyBuckets'
                     ],
                     resources: ['*'],
                 })
@@ -67,6 +65,10 @@ export class Ec2InstanceStack extends Stack {
             vpc: vpc,
             role: role,
             securityGroup: sg,
+            vpcSubnets: {
+                subnetType: ec2.SubnetType.PRIVATE_ISOLATED
+            },
+
             instanceName: 'test instance',
             instanceType: ec2.InstanceType.of( // t2.micro has free tier usage in aws
                 ec2.InstanceClass.T2,
@@ -79,7 +81,5 @@ export class Ec2InstanceStack extends Stack {
             value: Ec2Instance.instanceId,
             exportName: `ec2-instance-id`
         })
-
-
     }
 }

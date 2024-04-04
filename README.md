@@ -1,5 +1,6 @@
 # aws-cdk-vpc-endpoint
-Deploy endpoints for vpc via aws-cdk. The list of gateways and interfaces endpoints are managed in config folder
+Deploy endpoints for vpc via aws-cdk. The list of gateways and interfaces endpoints are managed in config folder.
+Deploy simple Ec2 instance in Data tier.
 
 ## Getting started
 ### Prerequisites: 
@@ -24,5 +25,5 @@ const accountName = process.env.ACCOUNT_NAME || 'sandpit1'
 const region = process.env.REGION || 'ap-southeast-2'
 ```
 - synth: cdk synth
-- deploy: cdk deploy
-- destroy: cdk destroy
+- deploy: cdk deploy --all or cdk deploy StackName to deploy one stack
+- destroy: cdk destroy --all 
