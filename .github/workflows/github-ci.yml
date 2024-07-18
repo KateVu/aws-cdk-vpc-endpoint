@@ -40,7 +40,6 @@ jobs:
           aws-region: ${{ env.REGION }}
       - name: deploy
         run: |
-          echo ${ECR_REPOSITORY}
           npm install
           npx cdk deploy --require-approval=never
 
@@ -70,6 +69,5 @@ jobs:
           aws-region: ${{ env.REGION }}
       - name: deploy
         run: |
-          echo ${ECR_REPOSITORY}
           npm install
           npx cdk deploy --require-approval=never          
