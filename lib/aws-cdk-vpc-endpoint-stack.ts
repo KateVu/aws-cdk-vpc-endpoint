@@ -44,38 +44,41 @@ export class AwsCdkVpcEndpointStack extends Stack {
 
     // It is annoying that our vpcendpoints do not have name. 
     // Because there is an issue with tagging https://github.com/aws/aws-cdk/issues/19332, hope cfn team will fix it soon
-    const wait = (): boolean => {
-      gateways.forEach((service) => {
-        const s3gateway = vpc.addGatewayEndpoint(`gateway-${service}`, {
-          service: {
-            name: `com.amazonaws.${region}.${service}`
-          }
-        })
-        new CfnOutput(this, `VPC Gateway Endpoint ${service}`, {
-          value: s3gateway.vpcEndpointId,
-          exportName: `vpc-gateway-endpoint-${service}`
-        })
+    let s3gateway: ec2.GatewayVpcEndpoint
+    gateways.forEach((service) => {
+      const gatewayEndpoint = vpc.addGatewayEndpoint(`gateway-${service}`, {
+        service: {
+          name: `com.amazonaws.${region}.${service}`
+        }
       })
-      return true
-    }
-
-    if (wait()) {
-      interfaces.forEach((service) => {
-        const s3interface = vpc.addInterfaceEndpoint(`interface-${service}`, {
-          service: new ec2.InterfaceVpcEndpointService(`com.amazonaws.${region}.${service}`),
-          privateDnsEnabled: true,
-          subnets: {
-            subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS
-          },
-          securityGroups: [sg]
-        })    
-        new CfnOutput(this, `VPC Interface Endpoint ${service}`, {
-          value: s3interface.vpcEndpointId,
-          exportName: `vpc-interface-endpoint-${service}`
-        })
+      new CfnOutput(this, `VPC Gateway Endpoint ${service}`, {
+        value: gatewayEndpoint.vpcEndpointId,
+        exportName: `vpc-gateway-endpoint-${service}`
       })
 
-    }
+      if (service =='s3') {
+        s3gateway = gatewayEndpoint
+      }
+    })
+
+    interfaces.forEach((service) => {
+      const interfaceEndpoint = vpc.addInterfaceEndpoint(`interface-${service}`, {
+        service: new ec2.InterfaceVpcEndpointService(`com.amazonaws.${region}.${service}`),
+        privateDnsEnabled: true,
+        subnets: {
+          subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS
+        },
+        securityGroups: [sg]
+      })    
+      new CfnOutput(this, `VPC Interface Endpoint ${service}`, {
+        value: interfaceEndpoint.vpcEndpointId,
+        exportName: `vpc-interface-endpoint-${service}`
+      })
+
+      if (service == 's3' && s3gateway != undefined) {
+        interfaceEndpoint.node.addDependency(s3gateway)
+      }
+    })
 
   }
 }
